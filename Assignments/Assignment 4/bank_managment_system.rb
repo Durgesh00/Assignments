@@ -40,7 +40,7 @@ end
 class Current_account <Account
 	@@curr_roi=0.54
 	def calc_roi
-		puts "Enter the number of month for which you want to know the interesr"
+		puts "Enter the number of month for which you want to know the interest"
 		mon_no=gets.chomp.to_f
 		if @balance==0
 			puts "Add some money here"
@@ -55,7 +55,7 @@ end
 class Saving_account <Account
 		@@curr_roi=0.86
 	  def calc_roi
-		puts "Enter the number of month for which you want to know the interesr"
+		puts "Enter the number of month for which you want to know the interest"
 		mon_no=gets.chomp.to_f
 		if @balance==0
 			puts "Add some money here"

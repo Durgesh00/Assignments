@@ -4,126 +4,147 @@
 #3. Check Food Item is available for ordering
 #4. Change status of order
 
-class Portal
-	@@menu={"Pizzas"=>150,"Burgers"=>100,"Butter-Chicken"=>300,"Chicken-Tikka"=>250}
-  @@menu_cnt={"Pizzas"=>5,"Burgers"=>10,"Butter-Chicken"=>3,"Chicken-Tikka"=>2}
-  
-	  def initialize()
-	  	 @status=false
-	     @ordered_item={}
-	  end
+class Food_Ordering_System
+	@@menu={"Pizzas"=>200,"Dal"=>100,"Egg Roll"=>50,"Veg Roll"=>30,"Momos"=>20,"Butter Chicker"=>300}
+	@@menu_count={"Pizzas"=>5,"Dal"=>5,"Egg Roll"=>5,"Veg Roll"=>5,"Momos"=>5,"Butter Chicken"=>5}
+	attr_accessor :status
 
+	def initialize
+	  @ordered_item={}
+		@status=false
+	end
 
-	  def display_menu
+	def display_menu
+		@@menu.each do |key,value|
+			print "Dish: #{key}   Price:#{value}"
+			puts ''
+		end
+	end
+
+	def check_item
+		print "Enter The Name Of Item You Want To Check :"
+		item=gets.chomp
+
+		flag_check=false
+		@@menu.each do |key,value|
+			if key==item
+				flag_check=true
+			end
+		end
+		if flag_check
+			if @@menu_count[item]>0
+				print "Yes The Item Is Available!"
+				puts ''
+			else
+				print "Sorry, The Item Is Not Available!"
+				puts ''
+			end
+		else
+			puts "Invalid Input"
+		end
+	end
+
+	def check_status
+		if @status
+			print "Your Order Has Been Placed!"
+			puts ''
+		else 
+			print "Your Order Is Pending!"
+			puts ''
+		end
+	
+	end
+
+	def accept_order
+		flag=true
+		while(flag)
+			print "Enter The Item You Want To Order: "
+			puts ''
+			item=gets.chomp
+			flag_in=false
+
+			flag_check=false
 			@@menu.each do |key,value|
-			puts"Food_Item:#{key},'       ',Price:,#{value}"
-	    end
-	  end
+				if key==item
+					flag_check=true
+				end
+			end
 
+			if flag_check
+				if @@menu_count[item]==0
+					print "Sorry, Item Is Not Available!"
+					puts ''
+				else
+					print "Item Added To Your Bag!"
+					puts''
+          @@menu_count[item]-=1
+          @ordered_item.each do |key,value|
+						if key==item
+							flag_in=true
+						end
+				end
+			end
 
-	  def check_item
-	       print "Enter the name of the item you want to check"
-	       item=gets.chomp
-	       puts ' '
-		     if @@menu_cnt[item]>0
-		       	print "Yes the item is available"
-		     else 
-	       	print "Sorry! The item is not available"
-	       end
-	  end
+			if flag_in
+				@ordered_item[item]+=1
+			else
+				@ordered_item[item]=1
+			end
+			else
+				print "You Entered Wrong Item!!!"
+				puts ''
+			end
 
-	  def check_status
-	   if @status
-	   	puts 'Your Order has been placed'
-	   else 
-	   	puts 'Your Order is pending'
-	   end
-	  end
-
-
-	  def Accept_order
-	  	flag = true
-	  	while(flag)
-			  	puts "Enter the item you want to order"
-			  	item = gets.chomp
-			  	puts item
-	       
-           flag3=false
-          @@menu.each do |key,value|
-          	if key==item
-          		flag3=true
-          	end
-
-          if flag3
-				  	if @@menu_cnt[item]==0
-
-				  		puts "Sorry the item is not available"
-				  		puts ' '
-				  	else 
-				  		puts "Item added to your bag"
-				  		puts ' '
-				  		@@menu_cnt[item]-=1
-		         
-				  		flag1=false
-				  		if @ordered_item.key(:item)
-				  		@ordered_item.each do |key,value|
-				  			if key==item
-				  				flag1=true
-				  			end
-				  		end
-				  	end
-		        end
-				  		if flag1
-				  		 @ordered_item[item]+=1
-				  		else
-				  		 @ordered_item[item]=1 
-		          end
-		        else 
-		        	print 'You entered a invalid item '
-
-		        end
-			  	
-			  	puts "Do you Want to order more(y/n)"
-			  	id=gets.chomp
-			  	if id=='n'
-			  		flag=false
-	        end
-	    end
-	    if @ordered_item.size
-	    	@status=true
-	    end
-	  end
-
-
+			print "If You Want To Order?[y/n]"
+			puts ''
+			option=gets.chomp
+			if option=='n'
+				print "Your Order Summary :"
+				puts ''
+				@ordered_item.each do |key,value|
+					print "Dish: #{key}   Quantity: #{value}"
+					puts ''
+				end
+				flag=false
+				@status=true
+			end
+		end
+	end
 end
 
-cust=Portal.new
-
-
-flag2=true
-while flag2
-	puts "=======-------Select From the following-------========"
+customer=Food_Ordering_System.new
+flag=true
+while(flag)
+	puts "*********Please Select Any Option*********"
 	puts "1.Display Menu"
-	puts "2.Check Order Status"
-	puts "3.Check Availability Of Item"
-	puts "4.Accept Order"
-  option=gets.to_i
-  case option
-  when 1
-  	cust.display_menu
-  when 2
-  	cust.check_status
-  when 3
-  	cust.check_item
-  when 4
-  	cust.Accept_order
-  else 
-  	print "Invalid Input !!!!"
-  end
-  print "If You Want to Continue(y/n)"
-  puts ''
-  id=gets.chomp
-  if id=='n'
-  	flag2=false
-  end
- end
+	puts "2.Check Availability Of Item"
+	puts "3.Accept Order"
+	puts "4.Order Status"
+	option=gets.to_i
+	case option
+		when 1
+			customer.display_menu
+		when 2
+			customer.check_item
+		when 3
+			if customer.status==false
+			customer.accept_order
+		  else
+		  	print "You Cannot Order Further, As You Already Have An Order!"
+		  	puts ''
+		  end
+		when 4
+			customer.check_status
+		else
+			print "Invalid Input!!!Please Enter Item Mentioned in the"
+			puts ''
+	end
+
+	print "If You Want To Continue?[y/n]"
+	puts ''
+
+	option=gets.chomp
+	if option=='n'
+		flag=false
+	end
+end

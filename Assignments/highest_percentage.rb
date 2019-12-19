@@ -1,11 +1,12 @@
 #Problem:Calculate the weekly Percentage of students for a 8 weeks Ruby Programming course
 
 class Result 
+
 	@@id=0
 	@@highest=[]
 	def initialize(name,marks)
 		@@id+=1
-        @stud_id=@@id
+    @stud_id=@@id
 		@name=name
 		@marks=marks
 		@cnt=0
@@ -16,6 +17,7 @@ class Result
 		for i in 0..@marks.size-1  do
 			@cnt+=@marks[i]
 		end
+		
 		@total=(@cnt*100)/800.0
 		@@highest.push(@total)
 		print "Students ID:" , @stud_id
